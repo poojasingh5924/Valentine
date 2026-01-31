@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>for shivam :)</title>
+
+<style>
+  /* ===================== BASE ===================== */
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: "Times New Roman", Times, serif;
+    background: #fdf6f0;
+    min-height: 100vh;
+    color: #3d2b1f;
+    overflow-x: hidden;
+    position: relative;
+  }
+
+  /* ===================== PAPER TEXTURE OVERLAY ===================== */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ===================== DOODLE HEARTS ===================== */
+  .doodle {
+    position: fixed;
+    pointer-events: none;
+    z-index: 0;
+    opacity: 0.12;
+    font-size: 2.2rem;
+    color: #c0392b;
+  }
+  .d1  { top: 6%;  left: 4%;  transform: rotate(-15deg); font-size: 1.8rem; }
+  .d2  { top: 12%; right: 7%; transform: rotate(20deg);  font-size: 2.6rem; opacity:.08; }
+  .d3  { top: 55%; left: 2%;  transform: rotate(-8deg);  font-size: 1.5rem; }
+  .d4  { bottom: 20%; right: 5%; transform: rotate(12deg); font-size: 2rem; opacity:.1; }
+  .d5  { bottom: 6%; left: 10%; transform: rotate(-22deg); font-size: 1.4rem; opacity:.07; }
+  .d6  { top: 38%; right: 3%; font-size: 1rem; opacity: .06; transform: rotate(5deg); }
+
+  /* ===================== MAIN ===================== */
+  .page {
+    position: relative;
+    z-index: 1;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 60px 22px 80px;
+    text-align: center;
+  }
+
+  /* ===================== TITLE AREA ===================== */
+  .title-wrap { margin-bottom: 44px; }
+
+  .title-wrap .little-heart {
+    display: inline-block;
+    font-size: 2rem;
+    color: #e74c6f;
+    animation: bob 2s ease-in-out infinite;
+  }
+  @keyframes bob {
+    0%,100% { transform: translateY(0); }
+    50%     { transform: translateY(-6px); }
+  }
+
+  .title-wrap h1 {
+    font-size: clamp(2.2rem, 7vw, 3.4rem);
+    font-weight: 700;
+    color: #c0392b;
+    margin-top: 10px;
+    line-height: 1.2;
+  }
+  .title-wrap h1 .name {
+    color: #e74c6f;
+    font-style: italic;
+  }
+  .title-wrap .little-note {
+    margin-top: 14px;
+    font-size: 1.15rem;
+    color: #8a7060;
+    font-style: italic;
+  }
+
+  /* NEW: rotating memory line */
+  .memory{
+    margin-top: 10px;
+    font-size: 1.05rem;
+    color: #6b5a48;
+    font-style: italic;
+  }
+
+  /* ===================== CARD ===================== */
+  .card {
+    background: #fff;
+    border-radius: 4px;
+    padding: 38px 28px 34px;
+    position: relative;
+    box-shadow:
+      0 1px 2px rgba(0,0,0,.06),
+      0 4px 14px rgba(0,0,0,.05);
+    border-left: 4px solid #d4c5a9;
+    margin-bottom: 30px;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(
+      to bottom,
+      transparent 0px,
+      transparent 30px,
+      #eee8d8 30px,
+      #eee8d8 31px
+    );
+    border-radius: 4px;
+    pointer-events: none;
+    opacity: 0.45;
+  }
+  .card > * { position: relative; z-index: 1; }
+
+  .card .q-text {
+    font-size: 1.7rem;
+    font-weight: 600;
+    color: #3d2b1f;
+    margin-bottom: 4px;
+  }
+  .card .q-sub {
+    font-size: 1rem;
+    color: #9a8a78;
+    margin-bottom: 24px;
+  }
+
+  /* ===================== OPTIONS ===================== */
+  .options { display: flex; flex-direction: column; gap: 10px; }
+
+  .opt {
+    display: block;
+    width: 100%;
+    background: #fdf6f0;
+    border: 2px solid #e0d5c5;
+    border-radius: 6px;
+    padding: 14px 18px;
+    text-align: left;
+    font-family: inherit;
+    font-size: 1.18rem;
+    color: #3d2b1f;
+    cursor: pointer;
+    transition: border-color .18s, background .18s, transform .15s;
+    position: relative;
+  }
+  .opt:hover {
+    border-color: #e74c6f;
+    background: #fff0f2;
+    transform: translateX(4px);
+  }
+  .opt .letter {
+    font-weight: 700;
+    color: #c0392b;
+    margin-right: 6px;
+  }
+
+  .opt.tiny { font-size: 0.78rem; padding: 7px 10px; opacity: 0.55; }
+  .opt.tiny:hover { opacity: 1; }
+  .opt.tinier { font-size: 0.6rem; padding: 5px 8px; opacity: 0.35; }
+  .opt.tinier:hover { opacity: 0.8; }
+
+  /* ===================== YES RESULT ===================== */
+  .result {
+    display: none;
+    animation: slideIn .45s cubic-bezier(.34,1.4,.64,1);
+  }
+  @keyframes slideIn {
+    from { opacity:0; transform: translateY(18px); }
+    to   { opacity:1; transform: translateY(0); }
+  }
+  .result .yay { font-size: 2.5rem; margin-bottom: 6px; }
+  .result .res-title {
+    font-size: 1.9rem;
+    font-weight: 700;
+    color: #c0392b;
+    margin-bottom: 10px;
+  }
+  .result .res-body {
+    font-size: 1.1rem;
+    color: #6b5a48;
+    line-height: 1.65;
+    margin-bottom: 26px;
+  }
+
+  /* ===================== BUTTON ===================== */
+  .send-btn {
+    display: inline-block;
+    background: #e74c6f;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 14px 34px;
+    font-family: inherit;
+    font-size: 1.15rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(231,76,111,.35);
+    transition: transform .18s, box-shadow .18s;
+  }
+  .send-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(231,76,111,.45);
+  }
+
+  /* ===================== RATING QUIZ ===================== */
+  .rating-quiz { display: none; animation: slideIn .45s cubic-bezier(.34,1.4,.64,1); }
+
+  .rating-quiz .q-text { margin-bottom: 2px; }
+  .rating-quiz .q-sub  { margin-bottom: 20px; }
+
+  .progress-wrap { margin-bottom: 22px; }
+  .progress-wrap .prog-label {
+    font-size: .9rem;
+    color: #9a8a78;
+    margin-bottom: 6px;
+    text-align: left;
+  }
+  .progress-track {
+    height: 7px;
+    background: #eee8d8;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    width: 0%;
+    background: #e74c6f;
+    border-radius: 4px;
+    transition: width .4s ease;
+  }
+
+  .star-row {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .star-btn {
+    background: none;
+    border: none;
+    font-size: 2.2rem;
+    cursor: pointer;
+    color: #ddd;
+    transition: color .15s, transform .15s;
+    line-height: 1;
+    padding: 4px;
+  }
+  .star-btn:hover,
+  .star-btn.lit {
+    color: #f39c12;
+    transform: scale(1.15);
+  }
+
+  .star-label {
+    font-size: .95rem;
+    color: #9a8a78;
+    min-height: 1.3em;
+    margin-bottom: 18px;
+    font-style: italic;
+    transition: color .2s;
+  }
+  .star-label.funny { color: #e74c6f; font-weight: 600; }
+
+  .next-btn {
+    display: none;
+    background: #e74c6f;
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    padding: 12px 30px;
+    font-family: inherit;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    box-shadow: 0 3px 12px rgba(231,76,111,.3);
+    transition: transform .15s;
+  }
+  .next-btn:hover { transform: translateY(-2px); }
+
+  /* ===================== FINAL SCORE ===================== */
+  .score-reveal {
+    display: none;
+    animation: slideIn .45s cubic-bezier(.34,1.4,.64,1);
+  }
+  .score-reveal .big-score {
+    font-size: 4.5rem;
+    font-weight: 700;
+    color: #e74c6f;
+    line-height: 1;
+    margin-bottom: 4px;
+  }
+  .score-reveal .score-sub {
+    font-size: 1rem;
+    color: #9a8a78;
+    margin-bottom: 14px;
+  }
+  .score-reveal .score-msg {
+    font-size: 1.1rem;
+    color: #6b5a48;
+    line-height: 1.6;
+    margin-bottom: 24px;
+  }
+
+  /* ===================== CONFETTI ===================== */
+  #confetti-canvas {
+    position: fixed; inset:0;
+    pointer-events: none;
+    z-index: 50;
+  }
+
+  /* ===================== FOOTER ===================== */
+  .footer {
+    margin-top: 40px;
+    font-size: .88rem;
+    color: #b0a090;
+    font-style: italic;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="doodle d1">♡</div>
+<div class="doodle d2">♡</div>
+<div class="doodle d3">♡</div>
+<div class="doodle d4">♡</div>
+<div class="doodle d5">♡</div>
+<div class="doodle d6">♡</div>
+
+<canvas id="confetti-canvas"></canvas>
+
+<div class="page">
+
+  <div class="title-wrap">
+    <div class="little-heart">♡</div>
+    <h1>hey <span class="name">shivam</span>,<br>be my valentine?</h1>
+    <p class="little-note">pick one. choose wisely. no pressure though lol</p>
+
+    <!-- NEW: rotating memory line -->
+    <p class="memory" id="memoryLine"></p>
+  </div>
+
+  <div class="card" id="quizCard">
+    <p class="q-text">so... will you?</p>
+    <p class="q-sub">this is very important. take your time.</p>
+    <div class="options" id="optionsWrap">
+      <button class="opt" onclick="sayYes()">
+        <span class="letter">A.</span> YASSS 💕
+      </button>
+      <button class="opt" id="optB" onclick="sayNo()">
+        <span class="letter">B.</span> Option A
+      </button>
+      <button class="opt" id="optC" onclick="sayNo()">
+        <span class="letter">C.</span> Option B
+      </button>
+      <button class="opt" onclick="sayYes()">
+        <span class="letter">D.</span> All of the above 🎉
+      </button>
+    </div>
+  </div>
+
+  <div class="card result" id="resultCard">
+    <div class="yay">🎊🥳💘</div>
+    <p class="res-title">yesss he said yes!!</p>
+    <p class="res-body">
+      okay okay okay! You actually give a GAF about me!!.<br>
+      but first... i have one more thing for you.
+    </p>
+    <button class="send-btn" onclick="startQuiz()">what is it? 👀</button>
+  </div>
+
+  <div class="card rating-quiz" id="ratingQuiz">
+    <p class="q-text" id="rqTitle">rate your boyfriend</p>
+    <p class="q-sub" id="rqSub">be honest. i'll know if you lie.</p>
+
+    <div class="progress-wrap">
+      <p class="prog-label" id="progLabel">question 1 of 5</p>
+      <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+    </div>
+
+    <div class="star-row" id="starRow">
+      <button class="star-btn" onclick="rateStar(1)">★</button>
+      <button class="star-btn" onclick="rateStar(2)">★</button>
+      <button class="star-btn" onclick="rateStar(3)">★</button>
+      <button class="star-btn" onclick="rateStar(4)">★</button>
+      <button class="star-btn" onclick="rateStar(5)">★</button>
+    </div>
+    <p class="star-label" id="starLabel">tap a star</p>
+
+    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">next →</button>
+  </div>
+
+  <div class="card score-reveal" id="scoreReveal">
+    <div class="big-score">100 / 100</div>
+    <p class="score-sub">obviously</p>
+    <p class="score-msg">
+      like did you really think any other score was possible?<br>
+      I made this quiz. I rigged it. You were never going to lose.<br>
+      you're stuck being perfect now. sorry not sorry.
+    </p>
+  </div>
+
+  <p class="footer">Made with love ~Pooja</p>
+</div>
+
+<script>
+  // NEW: rotating memory line (no name prompt)
+  const memories = [
+    "our first valentine’s day together, and the first of so many. i can’t wait to celebrate every tiny, silly, beautiful thing with you.",
+    "you’re my favorite person to annoy, and my favorite person to come home to.",
+    "this is officially on record now. no take backs.",
+    "i like you a normal amount. (that’s a lie.)",
+    "thanks for making even the boring days feel like something."
+  ];
+
+  let m = 0;
+  const memEl = document.getElementById("memoryLine");
+  if (memEl) {
+    memEl.textContent = memories[0];
+    setInterval(() => {
+      m = (m + 1) % memories.length;
+      memEl.textContent = memories[m];
+    }, 2600);
+  }
+
+  // existing code
+  let noPresses = 0;
+  const noTexts = [
+    "wait really? 🥺",
+    "are you serious right now",
+    "okay but like... are you sure",
+    "come oonnnn",
+    "last chance i swear"
+  ];
+
+  function sayNo() {
+    noPresses++;
+    const b = document.getElementById('optB');
+    const c = document.getElementById('optC');
+
+    if (noPresses === 1) {
+      b.classList.add('tiny');
+      c.classList.add('tiny');
+      b.innerHTML = '<span class="letter">B.</span> ' + noTexts[0];
+      c.innerHTML = '<span class="letter">C.</span> ' + noTexts[0];
+    } else if (noPresses === 2) {
+      b.classList.add('tinier');
+      c.classList.add('tinier');
+      b.innerHTML = '<span class="letter">B.</span> ' + noTexts[1];
+      c.innerHTML = '<span class="letter">C.</span> ' + noTexts[1];
+    } else if (noPresses === 3) {
+      b.style.display = 'none';
+      c.style.display = 'none';
+    }
+  }
+
+  function sayYes() {
+    document.getElementById('quizCard').style.display = 'none';
+    document.getElementById('resultCard').style.display = 'block';
+    confetti();
+  }
+
+  const questions = [
+    { title: "how funny is he?", sub: "be honest.", labels: ["...hmm", "kinda", "pretty funny", "actually hilarious", "he makes me cry laughing"] },
+    { title: "how good looking is he?", sub: "i already know the answer btw.", labels: ["Wrong answer", "Wrong answer", "actually really cute", "like really cute", "unfairly attractive and it's annoying"] },
+    { title: "how good is he at cuddling?", sub: "this is a scientific study.", labels: ["Wrong answer", "it's okay", "pretty cozy", "very cozy", "i never want to move again"] },
+    { title: "how lucky am i?", sub: "trick question but go ahead.", labels: ["Wrong answer", "Wrong answer", "pretty lucky", "really lucky", "astronomically lucky and i know it"] },
+    { title: "overall boyfriend rating?", sub: "this is the final one. make it count.", labels: ["Wrong answer", "he's good", "he's great", "he's amazing", "literally the best and i will fight anyone who says otherwise"] }
+  ];
+
+  let currentQ = 0;
+  let chosenStar = 0;
+
+  function startQuiz() {
+    document.getElementById('resultCard').style.display = 'none';
+    document.getElementById('ratingQuiz').style.display = 'block';
+    loadQuestion(0);
+  }
+
+  function loadQuestion(i) {
+    chosenStar = 0;
+    const q = questions[i];
+    document.getElementById('rqTitle').textContent = q.title;
+    document.getElementById('rqSub').textContent = q.sub;
+    document.getElementById('progLabel').textContent = 'question ' + (i + 1) + ' of ' + questions.length;
+    document.getElementById('progFill').style.width = ((i) / questions.length * 100) + '%';
+    document.getElementById('starLabel').textContent = 'tap a star';
+    document.getElementById('starLabel').classList.remove('funny');
+    document.getElementById('nextBtn').style.display = 'none';
+    document.getElementById('nextBtn').textContent = (i === questions.length - 1) ? 'see my score →' : 'next →';
+    document.querySelectorAll('.star-btn').forEach(function(s) { s.classList.remove('lit'); });
+  }
+
+  function rateStar(n) {
+    chosenStar = n;
+    document.querySelectorAll('.star-btn').forEach(function(s, idx) {
+      s.classList.toggle('lit', idx < n);
+    });
+    const label = document.getElementById('starLabel');
+    label.textContent = questions[currentQ].labels[n - 1];
+    label.classList.add('funny');
+    document.getElementById('nextBtn').style.display = 'inline-block';
+  }
+
+  function nextQuestion() {
+    if (chosenStar === 0) return;
+    currentQ++;
+    if (currentQ >= questions.length) {
+      document.getElementById('ratingQuiz').style.display = 'none';
+      document.getElementById('scoreReveal').style.display = 'block';
+      confetti();
+    } else {
+      loadQuestion(currentQ);
+    }
+  }
+
+  function confetti() {
+    const canvas = document.getElementById('confetti-canvas');
+    canvas.width  = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const colors = ['#e74c6f','#f39c12','#e74c3c','#9b59b6','#3498db','#1abc9c','#f1c40f'];
+    const bits = [];
+
+    for (let i = 0; i < 130; i++) {
+      bits.push({
+        x: Math.random() * canvas.width,
+        y: -Math.random() * canvas.height * 0.3,
+        vx: (Math.random() - 0.5) * 3.5,
+        vy: 1.8 + Math.random() * 2.8,
+        w: 5 + Math.random() * 7,
+        h: 3 + Math.random() * 5,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        rot: Math.random() * Math.PI * 2,
+        rv: (Math.random() - 0.5) * 0.18
+      });
+    }
+
+    let frames = 0;
+    function loop() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      bits.forEach(function(p) {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.035;
+        p.rot += p.rv;
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillStyle = p.color;
+        ctx.fillRect(-p.w/2, -p.h/2, p.w, p.h);
+        ctx.restore();
+      });
+      frames++;
+      if (frames < 160) requestAnimationFrame(loop);
+      else ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+    loop();
+  }
+</script>
+
+</body>
+</html>
